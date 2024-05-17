@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String identifier = '1C709B20'; // Replace with your Polar H10 device ID
+  final String identifier = 'C0680226';
   final Polar polar = Polar();
   String heartRateText = 'Waiting for data...';
   String ecgText = 'Waiting for data...';
@@ -36,9 +36,10 @@ class _MyAppState extends State<MyApp> {
     );
 
     polar.startHrStreaming(identifier).listen((hrData) {
-      final heartRate = hrData.samples;
+      final hr = hrData.samples[0];
+      final rrRhs = hrData.samples[1];
       setState(() {
-        heartRateText = 'Heart Rate: $heartRate bpm';
+        heartRateText = 'Heart Rate: $hr, rrRHS: $rrRhs';
       });
     });
 
@@ -54,7 +55,7 @@ class _MyAppState extends State<MyApp> {
       final accY = accData.samples[1];
       final accZ = accData.samples[2];
       setState(() {
-        accText = 'Accelerometer Data: X=$accX, Y=$accY, Z=$accZ';
+        accText = 'Accelerometer Data: X=${int.parse(accX.toString()) * 1000}, Y=${int.parse(accY.toString()) * 1000}, Z=${int.parse(accZ.toString()) * 1000}';
       });
     });
   }
